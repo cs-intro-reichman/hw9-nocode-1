@@ -57,10 +57,26 @@ public class MemorySpace {
 	 *        the length (in words) of the memory block that has to be allocated
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
-	public int malloc(int length) {		
-		//// Replace the following statement with your code
-		return -1;
-	}
+	public int malloc(int length) {
+        Iterator<MemoryBlock> iterator = freeList.iterator();
+        while (iterator.hasNext()) {
+            MemoryBlock freeBlock = iterator.next();
+            if (freeBlock.length >= length) {
+                int baseAddress = freeBlock.baseAddress;
+                MemoryBlock newBlock = new MemoryBlock(baseAddress, length);
+                allocatedList.addLast(newBlock);
+
+                if (freeBlock.length == length) {
+                    iterator.remove();
+                } else {
+                    freeBlock.baseAddress += length;
+                    freeBlock.length -= length;
+                }
+                return baseAddress;
+            }
+        }
+        return -1; 
+    }
 
 	/**
 	 * Frees the memory block whose base address equals the given address.
@@ -71,8 +87,17 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		//// Write your code here
-	}
+        Iterator<MemoryBlock> iterator = allocatedList.iterator();
+        while (iterator.hasNext()) {
+            MemoryBlock allocatedBlock = iterator.next();
+            if (allocatedBlock.baseAddress == address) {
+                freeList.addLast(allocatedBlock);
+                iterator.remove();
+                return;
+            }
+        }
+        throw new IllegalArgumentException("ERROR IllegalArgumentException: Memory block not found in the allocated list");
+    }
 	
 	/**
 	 * A textual representation of the free list and the allocated list of this memory space, 
@@ -88,7 +113,23 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		/// TODO: Implement defrag test
-		//// Write your code here
-	}
+        if (freeList.isEmpty()) {
+            return;
+        }
+
+        LinkedList<MemoryBlock> newFreeList = new LinkedList<>();
+        MemoryBlock currentBlock = freeList.removeFirst();
+
+        while (!freeList.isEmpty()) {
+            MemoryBlock nextBlock = freeList.removeFirst();
+            if (currentBlock.baseAddress + currentBlock.length == nextBlock.baseAddress) {
+                currentBlock.length += nextBlock.length;
+            } else {
+                newFreeList.addLast(currentBlock);
+                currentBlock = nextBlock;
+            }
+        }
+        newFreeList.addLast(currentBlock);
+        freeList = newFreeList;
+    }
 }
