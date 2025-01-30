@@ -229,7 +229,7 @@ public class LinkedList {
      * @throws IllegalArgumentException
      *         if index is negative or greater than or equal to size
      */
-	public void remove(int index) {
+    public void remove(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("ERROR IllegalArgumentException: index must be between 0 and size");
         }
@@ -247,7 +247,6 @@ public class LinkedList {
         }
         size--;
     }
-
 
 /**
      * Removes from this list the node pointing to the given memory block.
@@ -280,10 +279,10 @@ public class LinkedList {
             if (current.next == null) last = current; // Removed last node
             size--;
         } else {
-            throw new IllegalArgumentException("ERROR IllegalArgumentException: Memory block not found in the list");
+            throw new IllegalArgumentException("ERROR IllegalArgumentException: index must be between 0 and size");
         }
     }
-
+	
 	/**
 	 * Returns an iterator over this list, starting with the first element.
 	 */
