@@ -57,24 +57,10 @@ public class MemorySpace {
 	 *        the length (in words) of the memory block that has to be allocated
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
-	public int malloc(int length) {
-        for (Node freeNode : freeList) {
-            if (freeNode.block.length >= length) {
-                int baseAddress = freeNode.block.baseAddress;
-                MemoryBlock newBlock = new MemoryBlock(baseAddress, length);
-                allocatedList.addLast(newBlock);
-
-                if (freeNode.block.length == length) {
-                    freeList.remove(freeNode);
-                } else {
-                    freeNode.block.baseAddress += length;
-                    freeNode.block.length -= length;
-                }
-                return baseAddress;
-            }
-        }
-        return -1; 
-    }
+	public int malloc(int length) {		
+		//// Replace the following statement with your code
+		return -1;
+	}
 
 	/**
 	 * Frees the memory block whose base address equals the given address.
@@ -85,17 +71,8 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-        Node current = allocatedList.first;
-        while (current != null) {
-            if (current.block.baseAddress == address) {
-                freeList.addLast(current.block);
-                allocatedList.remove(current);
-                return;
-            }
-            current = current.next;
-        }
-        throw new IllegalArgumentException("Memory block not found in the allocated list");
-    }
+		//// Write your code here
+	}
 	
 	/**
 	 * A textual representation of the free list and the allocated list of this memory space, 
